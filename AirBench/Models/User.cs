@@ -11,12 +11,12 @@ namespace AirBench.Models
         public User() { }              //empty constructor
 
         //initializing constructor
-        public User(int id, string name, string userName, string password)
+        public User(int id, string name, string userName, string hashedPassword)
         {
             Id = id;
             Name = name;
             UserName = userName;
-            Password = password;
+            HashedPassword = hashedPassword;
         }
 
         public int Id { get; set; }
@@ -25,6 +25,6 @@ namespace AirBench.Models
         [Required]
         public string UserName { get; set; }
         [Required]
-        public string Password { get; set; }
+        public string HashedPassword { get; set; }
     }
 }

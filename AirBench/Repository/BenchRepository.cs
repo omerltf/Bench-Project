@@ -39,5 +39,12 @@ namespace AirBench.Repository
         {
             return context.Benches.ToList();
         }
+
+        public List<Review> GetReviewList(int id)
+        {
+            return context.Reviews
+                    .Where(r => r.BenchId == id)
+                    .ToList();
+        }
     }
 }

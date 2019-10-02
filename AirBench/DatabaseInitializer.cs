@@ -16,7 +16,7 @@ namespace AirBench
             {
                 Name = "Omer Latif",
                 UserName = "omerltf@gmail.com",
-                Password = "password"
+                HashedPassword = "$2a$10$5VRNPvBIY9iz/u26rHGFEen3KcWs2rMu1zI9wjqzXNAHpF6UGmQc."
             });
         }
     }

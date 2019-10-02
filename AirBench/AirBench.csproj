@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BCrypt.Net, Version=0.1.4141.31969, Culture=neutral, PublicKeyToken=f3bc8f8c31beeb49, processorArchitecture=MSIL">
+      <HintPath>..\packages\BCrypt.Net.0.1.0\lib\net35\BCrypt.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -173,9 +177,12 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="DatabaseInitializer.cs" />
     <Compile Include="Data\Context.cs" />
+    <Compile Include="FormModels\BenchDetails.cs" />
+    <Compile Include="FormModels\BenchList.cs" />
     <Compile Include="FormModels\CreateBench.cs" />
     <Compile Include="FormModels\CreateReview.cs" />
     <Compile Include="FormModels\CreateUser.cs" />
+    <Compile Include="FormModels\LoginView.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -185,6 +192,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\BenchRepository.cs" />
     <Compile Include="Repository\LoginRepository.cs" />
+    <Compile Include="Security\CustomIdentity.cs" />
+    <Compile Include="Security\CustomPrincipal.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\pure.css" />
@@ -197,7 +206,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Content\Site.css" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -214,13 +222,16 @@
     <Content Include="Views\Bench\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\Bench\Review.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Login\Login.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Views\Bench\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Bench\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Bench\Review.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
