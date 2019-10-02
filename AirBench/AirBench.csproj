@@ -199,6 +199,11 @@
     <Content Include="Content\pure.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.css" />
+    <Content Include="Scripts\bootstrap.min.css" />
+    <Content Include="Scripts\map.js" />
+    <Content Include="Scripts\pure.css" />
+    <Content Include="Scripts\Site.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
