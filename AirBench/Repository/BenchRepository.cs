@@ -16,12 +16,6 @@ namespace AirBench.Repository
             this.context = context;
         }
 
-        public void InsertReview (Review review)
-        {
-            context.Reviews.Add(review);
-            context.SaveChanges();
-        }
-
         public void Insert(Bench bench)
         {
             context.Benches.Add(bench);
@@ -38,13 +32,6 @@ namespace AirBench.Repository
         public List<Bench> GetBenchList()
         {
             return context.Benches.ToList();
-        }
-
-        public List<Review> GetReviewList(int id)
-        {
-            return context.Reviews
-                    .Where(r => r.BenchId == id)
-                    .ToList();
         }
     }
 }
