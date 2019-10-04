@@ -26,14 +26,6 @@
             @Html.DisplayFor(model => model.NumberOfSeats)
         </dd>
 
-        @*<dt>
-            @Html.DisplayNameFor(model => model.CreatorUserId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatorUserId)
-        </dd>*@
-
         <dt>
             @Html.DisplayNameFor(model => model.CreatorUserName)
         </dt>
@@ -68,6 +60,8 @@
     {
         <h3>Rating: @review.Rating</h3>
         <p>Description: @review.Description</p>
+        <p>Creator Name: @review.User.Name</p>
+        <p>Created On: @review.CreatedOn</p>
         <br />
         <br />
     }

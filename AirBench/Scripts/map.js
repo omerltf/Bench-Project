@@ -23,15 +23,8 @@ var map = new ol.Map({
     })
 });
 
-
-//Adding a marker on the map
-var marker = new ol.Feature({
-    geometry: new ol.geom.Point(
-      ol.proj.fromLonLat([-74.006, 40.7127])
-    ),  // Cordinates of New York's Town Hall
-});
 var vectorSource = new ol.source.Vector({
-    features: [marker]
+    features: [new ol.Feature()]
 });
 var markerVectorLayer = new ol.layer.Vector({
     source: vectorSource,
@@ -59,14 +52,20 @@ function addMarker (latitude, longitude, benchId){
 async function getBenchList (){
     return await fetch ('api/Bench/Get');
 }
+
+//let jsonResponse = await benches.json();
+//DisplayBenches(jsonResponse.benchList)
+
 let benches = await getBenchList();
+let jsonResponse = await benches.json();
 
 async function drawMarkers (){
-    let jsonResponse = await benches.json();
+    
+    DisplayBenches(jsonResponse.benchList)
     //console.log(jsonResponse)
     jsonResponse.benchList.forEach(element => {
-        //console.log(element)
-        addMarker(element['Latitude'], element['Longitude'], element['benchId']);
+        console.log(element)
+        addMarker(element['Latitude'], element['Longitude'], element['Id']);
     });
 }
 drawMarkers();
@@ -104,33 +103,116 @@ map.on('click', clickHandler);
 document.getElementById("minInput").addEventListener("keyup", minFunction)
 document.getElementById("maxInput").addEventListener("keyup", maxFunction)
 
+let filteredbench = [];
+filteredbench = jsonResponse.benchList;
+DisplayBenches(filteredbench)
+let minvalue = undefined;
+let maxvalue = undefined;
 function minFunction (event) {
-    let input = document.getElementById('minInput');
-    let list = document.getElementsByClassName('inner-list');
-    console.log(list);
-    for (let item of list){
-        console.log(item);
-        //let num = item.getElementById('Number');
-        //console.log (num);
+    minvalue = document.getElementById("minInput").value
+    console.log('min value is' + minvalue)
+    console.log('max value is'+ maxvalue)
+    if (!(minvalue==0 || minvalue==undefined)){
+        if (maxvalue==undefined || maxvalue==0){
+            filteredbench = [];
+            for(let bench of jsonResponse.benchList){
+                if (bench['NumberOfSeats']>=minvalue){
+                    filteredbench.push(bench);
+                    console.log(bench['NumberOfSeats'])
+                }
+            }
+        }
+        else {
+            filteredbench = [];
+            for(let bench of jsonResponse.benchList){
+                if (bench['NumberOfSeats']<=maxvalue && bench['NumberOfSeats']>=minvalue){
+                    filteredbench.push(bench);
+                    console.log(bench['NumberOfSeats'])
+                }
+            }
+        }
     }
+    else {
+        filteredbench = jsonResponse.benchList;
+    }
+    DisplayBenches(filteredbench)
+    console.log(filteredbench)
 }
 
 function maxFunction (event) {
-    let input = document.getElementById('maxInput');
-    let list = document.getElementsByClassName('inner-list');
-    list.forEach(element => {
-        let num = element.getElementById('Number');
-        console.log(num);
-    });
+    
+    maxvalue = document.getElementById('maxInput').value
+    console.log('min value is' + minvalue)
+    console.log('max value is'+ maxvalue)
+    if (!(maxvalue==0 || maxvalue==undefined)){
+        if (minvalue==undefined || minvalue==0){
+            filteredbench = [];
+            for(let bench of jsonResponse.benchList){
+                if (bench['NumberOfSeats']<=maxvalue){
+                    filteredbench.push(bench);
+                    console.log(bench['NumberOfSeats'])
+                }
+            }
+        }
+        else {
+            filteredbench = [];
+            for(let bench of jsonResponse.benchList){
+                if (bench['NumberOfSeats']<=maxvalue && bench['NumberOfSeats']>=minvalue){
+                    filteredbench.push(bench);
+                    console.log(bench['NumberOfSeats'])
+                }
+            }
+        }
+    }
+    else {
+        filteredbench = jsonResponse.benchList;    
+    }
+    DisplayBenches(filteredbench)
 }
 
 
 function DisplayBenches (filteredBenches){
     var table = document.getElementById("table")
+    table.innerHTML = "";
+    addHead(table,'Description')
+    addHead(table,'NumberOfSeats')
+    addHead(table,'CreatorUserId')
+    addHead(table,'Name')
+    addHead(table,'Latitude')
+    addHead(table,'Longitude')
+    addHead(table,'Rating')
+    addHead(table,'NumberOfReviews')
+    addHead(table,'')
     for (let bench of filteredBenches){
         console.log(bench);
-        //addRow(table, )
+        // let d='';
+        // let description = bench.Description.split(' ');
+        // if (description.length > 10){
+        //     d = description.slice(0,10).join(' ');
+        //     d+='...';
+        // }
+        //console.log('Description is'+d)
+        let rating = bench.Rating;
+        if (rating == 0 ) {rating = 'No Rating'}
+        addRow(
+            table,
+            bench.Description,
+            bench.NumberOfSeats,
+            bench.CreatorUserId,
+            bench.Name,
+            bench.Latitude,
+            bench.Longitude,
+            rating,
+            bench.NumberOfReviews,
+            `<a href="/Bench/Details/${bench.Id}">Details</a> `
+            )
     }
+}
+
+function addHead(tr, val){
+    var th = document.createElement('th');
+    th.innerHTML = val;
+    tr.appendChild(th)
 }
 
 function addCell(tr, val) {
@@ -141,16 +223,19 @@ function addCell(tr, val) {
     tr.appendChild(td)
 }
 
-function addRow(tbl, val_1, val_2, val_3) {
+function addRow(tbl, val_1, val_2, val_3, val_4, val_5, val_6, val_7, val_8, val_9) {
     var tr = document.createElement('tr');
 
     addCell(tr, val_1);
     addCell(tr, val_2);
     addCell(tr, val_3);
+    addCell(tr, val_4);
+    addCell(tr, val_5);
+    addCell(tr, val_6);
+    addCell(tr, val_7);
+    addCell(tr, val_8);
+    addCell(tr, val_9);
 
     tbl.appendChild(tr)
 }
-
-
-
 })();
