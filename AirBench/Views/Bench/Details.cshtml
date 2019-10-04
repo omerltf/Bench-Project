@@ -1,0 +1,81 @@
+﻿@model AirBench.FormModels.BenchDetails
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>BenchDetails</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumberOfSeats)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumberOfSeats)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatorUserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatorUserId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatorUserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatorUserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Latitude)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Latitude)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Longitude)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Longitude)
+        </dd>
+
+    </dl>
+</div>
+
+<h2>Reviews</h2>
+@if (Model.reviews.Count != 0)
+{
+    foreach (var review in Model.reviews)
+    {
+        <h3>@review.Rating</h3>
+        <p>@review.Description</p>
+        <br />
+        <br />
+    }
+}
+else{ 
+    <p>No Reviews</p>
+}
+<p>
+    @Html.ActionLink("Review", "Review", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
