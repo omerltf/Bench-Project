@@ -1,6 +1,7 @@
 ﻿using AirBench.FormModels;
 using AirBench.Models;
 using AirBench.Repository;
+using AirBench.Security;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
@@ -13,19 +14,22 @@ namespace AirBench.Controllers
 {
     public class BenchController : BaseController
     {
-        public ActionResult Create()
+        [Authorize]
+        public ActionResult Create(decimal? latitude, decimal? longitude)
         {
             CreateBench bench = new CreateBench();
             return View("Create", bench);
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult Create(CreateBench bench)
         {
+            CustomPrincipal currentUser = (CustomPrincipal)User;
             BenchRepository repository = new BenchRepository(context);
             try
             {
-                Bench newBench = new Bench(bench.Description, bench.NumberOfSeats, 1, bench.Latitude, bench.Longitude);
+                Bench newBench = new Bench(bench.Description, bench.NumberOfSeats, currentUser.User.Id, bench.Latitude, bench.Longitude);
                 repository.Insert(newBench);
                 return RedirectToAction("Index");
             }
@@ -36,33 +40,83 @@ namespace AirBench.Controllers
             return View("Create", bench);
         }
 
+        [Authorize]
         public ActionResult Review(int id)
         {
             CreateReview myReview = new CreateReview();
             myReview.BenchId = id;
             return View("Review",myReview);
         }
+        [Authorize]
         [HttpPost]
         public ActionResult Review (CreateReview review)
         {
-            BenchRepository repository = new BenchRepository(context);
-            Review myReview = new Review(review.Rating, review.Description, 1, review.BenchId);
-            repository.InsertReview(myReview);
-            return RedirectToAction("Details");
+            CustomPrincipal currentUser = (CustomPrincipal)User;
+            if (ModelState.IsValid)
+            {
+                BenchRepository repository = new BenchRepository(context);
+                ReviewRepository repo = new ReviewRepository(context);
+                Review myReview = new Review(review.Rating, review.Description, currentUser.User.Id, review.BenchId);
+                repo.InsertReview(myReview);
+                return RedirectToAction("Index");
+            }
+            return View(review);
         }
 
         public ActionResult Index ()
         {
             BenchRepository repository = new BenchRepository(context);
+            ReviewRepository repo = new ReviewRepository(context);
             List<Bench> myBenches = repository.GetBenchList();
-            return View("Index", myBenches);
+            List<BenchList> myBenchList = new List<BenchList>();
+            foreach(var bench in myBenches)
+            {
+                var reviews = repo.GetReviewList(bench.Id);
+                BenchList currentBench = new BenchList();
+                currentBench.CreatorUserId = bench.CreatorUserId;
+                currentBench.Description = bench.Description;
+                currentBench.Latitude = bench.Latitude;
+                currentBench.Longitude = bench.Longitude;
+                currentBench.NumberOfSeats = bench.NumberOfSeats;
+                currentBench.NumberOfReviews = reviews.Count;
+                currentBench.Id = bench.Id;
+                decimal sum = 0;
+                foreach (var review in reviews)
+                {
+                    sum += (decimal)review.Rating;
+                }
+                if (reviews.Count != 0)
+                {
+                    currentBench.Rating = sum / reviews.Count;
+                }
+                else
+                {
+                    currentBench.Rating = 0;
+                }
+                myBenchList.Add(currentBench);
+            }
+
+            return View("Index", myBenchList);
         }
 
         public ActionResult Details (int id)
         {
             BenchRepository repository = new BenchRepository(context);
+            LoginRepository repo = new LoginRepository(context);
+            ReviewRepository reviewRepository = new ReviewRepository(context);
             Bench myBench = repository.GetById(id);
-            return View("Details", myBench);
+            User thisUser = repo.GetById(myBench.CreatorUserId);
+            BenchDetails myBenchDetails = new BenchDetails();
+            myBenchDetails.CreatorUserId = myBench.CreatorUserId;
+            myBenchDetails.CreatorUserName = thisUser.UserName;
+            myBenchDetails.Description = myBench.Description;
+            myBenchDetails.Latitude = myBench.Latitude;
+            myBenchDetails.Longitude = myBench.Longitude;
+            myBenchDetails.NumberOfSeats = myBench.NumberOfSeats;
+            myBenchDetails.reviews = reviewRepository.GetReviewList(id);
+            myBenchDetails.Id = myBench.Id;
+
+            return View("Details", myBenchDetails);
         }
 
         private void HandleDbUpdateException(DbUpdateException ex)

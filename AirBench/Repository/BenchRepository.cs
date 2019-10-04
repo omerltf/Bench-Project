@@ -16,12 +16,6 @@ namespace AirBench.Repository
             this.context = context;
         }
 
-        public void InsertReview (Review review)
-        {
-            context.Reviews.Add(review);
-            context.SaveChanges();
-        }
-
         public void Insert(Bench bench)
         {
             context.Benches.Add(bench);

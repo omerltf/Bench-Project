@@ -22,5 +22,19 @@ namespace AirBench.Repository
             context.SaveChanges();
         }
 
+        public User GetByUserName(string userName)
+        {
+            return  context.Users
+                    .Where(u => u.UserName == userName)
+                    .SingleOrDefault();
+        }
+
+        public User GetById (int id)
+        {
+            return context.Users
+                    .Where(u => u.Id == id)
+                    .SingleOrDefault();
+        }
+
     }
 }
