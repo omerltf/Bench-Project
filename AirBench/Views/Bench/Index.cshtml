@@ -9,7 +9,10 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+
+<input type="number" id="minInput" placeholder="Min">
+<input type="number" id="maxInput" placeholder="Max">
+<table id="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Description)
@@ -19,6 +22,9 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.CreatorUserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Latitude)
@@ -35,16 +41,19 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
+@*@foreach (var item in Model) {
+    <tr class="inner-list">
         <td>
             @Html.DisplayFor(modelItem => item.Description)
         </td>
-        <td>
+        <td id="Number">
             @Html.DisplayFor(modelItem => item.NumberOfSeats)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CreatorUserId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Latitude)
@@ -53,18 +62,22 @@
             @Html.DisplayFor(modelItem => item.Longitude)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Rating)
+            @if ((item.Rating > (decimal) 0.0)){
+                @Html.DisplayFor(modelItem => item.Rating);
+            }
+            else
+            {
+                <p>No Rating</p>
+            }
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.NumberOfReviews)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Details", "Details", new { id=item.Id })
         </td>
     </tr>
-}
+}*@
 
 </table>
 

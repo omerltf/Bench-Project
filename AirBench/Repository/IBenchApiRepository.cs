@@ -11,6 +11,6 @@ namespace AirBench.Repository
     public interface IBenchApiRepository
     {
         //Task<Bench> GetById(int id);
-        Task<List<BenchInfo>> GetBenchList();
+        Task<List<BenchList>> GetBenchList();
     }
 }

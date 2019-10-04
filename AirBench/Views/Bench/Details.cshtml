@@ -26,13 +26,13 @@
             @Html.DisplayFor(model => model.NumberOfSeats)
         </dd>
 
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.CreatorUserId)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.CreatorUserId)
-        </dd>
+        </dd>*@
 
         <dt>
             @Html.DisplayNameFor(model => model.CreatorUserName)
@@ -66,8 +66,8 @@
 {
     foreach (var review in Model.reviews)
     {
-        <h3>@review.Rating</h3>
-        <p>@review.Description</p>
+        <h3>Rating: @review.Rating</h3>
+        <p>Description: @review.Description</p>
         <br />
         <br />
     }

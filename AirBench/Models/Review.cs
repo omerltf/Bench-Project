@@ -9,12 +9,13 @@ namespace AirBench.Models
     public class Review
     {
         public Review () { }
-        public Review (int rating, string description, int userId, int benchId)
+        public Review (int rating, string description, int userId, int benchId, DateTime createdOn)
         {
             this.Rating = rating;
             this.Description = description;
             this.UserId = userId;
             this.BenchId = benchId;
+            this.CreatedOn = createdOn;
         }
 
         public int Rating { get; set; }
@@ -23,7 +24,7 @@ namespace AirBench.Models
         public int Id { get; set; }
         public int UserId { get; set; }
         public int BenchId { get; set; }
-
+        public DateTime CreatedOn { get; set; }
         public User User { get; set; }
         public Bench Bench { get; set; }
     }

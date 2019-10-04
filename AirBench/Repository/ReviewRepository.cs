@@ -20,6 +20,7 @@ namespace AirBench.Repository
         {
             return context.Reviews
                     .Where(r => r.BenchId == id)
+                    .OrderByDescending(r => r.CreatedOn)
                     .ToList();
         }
 

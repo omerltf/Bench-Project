@@ -23,6 +23,7 @@ namespace AirBench.Models
         [Required]
         public string Name { get; set; }
         [Required]
+        [EmailAddress]
         public string UserName { get; set; }
         [Required]
         public string HashedPassword { get; set; }
