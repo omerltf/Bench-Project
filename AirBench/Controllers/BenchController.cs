@@ -15,7 +15,7 @@ namespace AirBench.Controllers
     public class BenchController : BaseController
     {
         [Authorize]
-        public ActionResult Create()
+        public ActionResult Create(decimal? latitude, decimal? longitude)
         {
             CreateBench bench = new CreateBench();
             return View("Create", bench);
@@ -55,8 +55,9 @@ namespace AirBench.Controllers
             if (ModelState.IsValid)
             {
                 BenchRepository repository = new BenchRepository(context);
+                ReviewRepository repo = new ReviewRepository(context);
                 Review myReview = new Review(review.Rating, review.Description, currentUser.User.Id, review.BenchId);
-                repository.InsertReview(myReview);
+                repo.InsertReview(myReview);
                 return RedirectToAction("Index");
             }
             return View(review);
@@ -65,11 +66,12 @@ namespace AirBench.Controllers
         public ActionResult Index ()
         {
             BenchRepository repository = new BenchRepository(context);
+            ReviewRepository repo = new ReviewRepository(context);
             List<Bench> myBenches = repository.GetBenchList();
             List<BenchList> myBenchList = new List<BenchList>();
             foreach(var bench in myBenches)
             {
-                var reviews = repository.GetReviewList(bench.Id);
+                var reviews = repo.GetReviewList(bench.Id);
                 BenchList currentBench = new BenchList();
                 currentBench.CreatorUserId = bench.CreatorUserId;
                 currentBench.Description = bench.Description;
@@ -101,6 +103,7 @@ namespace AirBench.Controllers
         {
             BenchRepository repository = new BenchRepository(context);
             LoginRepository repo = new LoginRepository(context);
+            ReviewRepository reviewRepository = new ReviewRepository(context);
             Bench myBench = repository.GetById(id);
             User thisUser = repo.GetById(myBench.CreatorUserId);
             BenchDetails myBenchDetails = new BenchDetails();
@@ -110,7 +113,7 @@ namespace AirBench.Controllers
             myBenchDetails.Latitude = myBench.Latitude;
             myBenchDetails.Longitude = myBench.Longitude;
             myBenchDetails.NumberOfSeats = myBench.NumberOfSeats;
-            myBenchDetails.reviews = repository.GetReviewList(id);
+            myBenchDetails.reviews = reviewRepository.GetReviewList(id);
             myBenchDetails.Id = myBench.Id;
 
             return View("Details", myBenchDetails);
