@@ -16,12 +16,12 @@ namespace AirBench.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-           // modelBuilder.Entity<Review>()
-           //.HasOptional<User>(s => s.User)
-           //.WithMany()
-           //.WillCascadeOnDelete(false);
-
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+
+            var benchEntity = modelBuilder.Entity<Bench>();
+            benchEntity.Property(b => b.Latitude).HasPrecision(9, 6);
+            benchEntity.Property(b => b.Longitude).HasPrecision(9, 6);
+
             base.OnModelCreating(modelBuilder);
         }
     }

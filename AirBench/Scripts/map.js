@@ -1,16 +1,4 @@
-﻿//var map = new ol.Map({
-//    target: 'map',
-//    layers: [
-//      new ol.layer.Tile({
-//          source: new ol.source.OSM()
-//      })
-//    ],
-//    view: new ol.View({
-//        center: ol.proj.fromLonLat([37.41, 8.82]),
-//        zoom: 4
-//    })
-//});
-(async () => {
+﻿(async () => {
 var baseMapLayer = new ol.layer.Tile({
     source: new ol.source.OSM()
 });
@@ -39,7 +27,7 @@ function addMarker (latitude, longitude, benchId){
       );
     
     var mark = new ol.Feature({     
-        geometry: point,  // Cordinates of New York's Town Hall 
+        geometry: point, 
     });
     mark.setId(benchId);
     console.log('latitude is ' + latitude);
@@ -53,44 +41,27 @@ async function getBenchList (){
     return await fetch ('api/Bench/Get');
 }
 
-//let jsonResponse = await benches.json();
-//DisplayBenches(jsonResponse.benchList)
-
 let benches = await getBenchList();
 let jsonResponse = await benches.json();
 
-async function drawMarkers (){
-    
-    DisplayBenches(jsonResponse.benchList)
-    //console.log(jsonResponse)
-    jsonResponse.benchList.forEach(element => {
+async function drawMarkers (response){
+    vectorSource.clear();
+    response.forEach(element => {
         console.log(element)
         addMarker(element['Latitude'], element['Longitude'], element['Id']);
     });
 }
-drawMarkers();
+drawMarkers(jsonResponse.benchList);
 
 
 function clickHandler (event){
     let flag =true;
-    //debugger;
     map.forEachFeatureAtPixel(event.pixel, function (feature,layer){
 
-        //debugger;
         flag = false;
-        //console.log('my feature is' + feature);
-        // var coord =  ol.proj.transform(event.coordinate, 'EPSG:3857', 'EPSG:4326');
-        // console.log (coord);
-        //console.log ('my Id is: ' + feature.getId());
         document.location.href = "/Bench/Details/" + feature.getId();
     })
 
-
-    // if (event.target instanceof ol.geom.Point){
-    //     console.log('found point');
-    // }
-    //console.log(event)
-    //console.log(ol.geom.Point.getType());
     if (flag == true){
     var coord =  ol.proj.transform(event.coordinate, 'EPSG:3857', 'EPSG:4326');
     var latitude = coord[1];
@@ -135,8 +106,9 @@ function minFunction (event) {
     else {
         filteredbench = jsonResponse.benchList;
     }
+    vectorSource.clear();
+    drawMarkers(filteredbench);
     DisplayBenches(filteredbench)
-    console.log(filteredbench)
 }
 
 function maxFunction (event) {
@@ -167,6 +139,8 @@ function maxFunction (event) {
     else {
         filteredbench = jsonResponse.benchList;    
     }
+    vectorSource.clear();
+    drawMarkers(filteredbench);
     DisplayBenches(filteredbench)
 }
 
@@ -185,13 +159,6 @@ function DisplayBenches (filteredBenches){
     addHead(table,'')
     for (let bench of filteredBenches){
         console.log(bench);
-        // let d='';
-        // let description = bench.Description.split(' ');
-        // if (description.length > 10){
-        //     d = description.slice(0,10).join(' ');
-        //     d+='...';
-        // }
-        //console.log('Description is'+d)
         let rating = bench.Rating;
         if (rating == 0 ) {rating = 'No Rating'}
         addRow(
