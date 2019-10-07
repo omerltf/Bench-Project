@@ -19,14 +19,6 @@ namespace AirBench.Repository
             this.context = context;
         }
 
-        //async public Task<Bench> GetById(int id)
-        //{
-        //    Bench myBench = context.Benches
-        //                    .Where(b => b.Id == id)
-        //                    .SingleOrDefault();
-        //    return myBench;
-        //}
-
         async public Task<List<BenchList>> GetBenchList()
         {
             ReviewRepository repo = new ReviewRepository(context);
@@ -97,25 +89,6 @@ namespace AirBench.Repository
                 myBenchList.Add(currentBench);
             }
             return myBenchList;
-
-            //List<Bench> benches = await context.Benches.ToListAsync();
-            //List<BenchList> benchResponses = new List<BenchList>();
-            //foreach(var bench in benches)
-            //{
-            //    //BenchList myResponse = new BenchList();
-            //    //myResponse.benchId = bench.Id;
-            //    //myResponse.Description = bench.Description;
-            //    //myResponse.Latitude = bench.Latitude;
-            //    //myResponse.Longitude = bench.Longitude;
-            //    //myResponse.NumberOfSeats = bench.NumberOfSeats;
-            //    //benchResponses.Add(myResponse);
-
-
-
-
-
-            //}
-            //return benchResponses;
         }
     }
 }
