@@ -7,6 +7,6 @@ namespace AirBench.FormModels
 {
     public class BenchResponse
     {
-        public List<BenchInfo> benchInfo { get; set; }
+        public List<BenchList> benchList { get; set; }
     }
 }

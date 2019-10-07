@@ -29,9 +29,9 @@ namespace AirBench.Controllers
         [Route("Get")]
         async public Task<BenchResponse> Get()
         {
-            List<BenchInfo> benchInfo = await Repository.GetBenchList();
+            List<BenchList> benchList = await Repository.GetBenchList();
             BenchResponse myResponse = new BenchResponse();
-            myResponse.benchInfo = benchInfo;
+            myResponse.benchList = benchList;
             return myResponse;
         }
     }

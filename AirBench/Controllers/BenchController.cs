@@ -49,16 +49,16 @@ namespace AirBench.Controllers
         }
         [Authorize]
         [HttpPost]
-        public ActionResult Review (CreateReview review)
+        public ActionResult Review (CreateReview review, int id)
         {
             CustomPrincipal currentUser = (CustomPrincipal)User;
             if (ModelState.IsValid)
             {
                 BenchRepository repository = new BenchRepository(context);
                 ReviewRepository repo = new ReviewRepository(context);
-                Review myReview = new Review(review.Rating, review.Description, currentUser.User.Id, review.BenchId);
+                Review myReview = new Review(review.Rating, review.Description, currentUser.User.Id, id, DateTime.Now);
                 repo.InsertReview(myReview);
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new {id=id });
             }
             return View(review);
         }
@@ -67,13 +67,23 @@ namespace AirBench.Controllers
         {
             BenchRepository repository = new BenchRepository(context);
             ReviewRepository repo = new ReviewRepository(context);
+            LoginRepository Repository = new LoginRepository(context);
             List<Bench> myBenches = repository.GetBenchList();
             List<BenchList> myBenchList = new List<BenchList>();
             foreach(var bench in myBenches)
             {
+                User user = Repository.GetById(bench.CreatorUserId);
+                var name = user.Name.Split(' ');
                 var reviews = repo.GetReviewList(bench.Id);
                 BenchList currentBench = new BenchList();
                 currentBench.CreatorUserId = bench.CreatorUserId;
+                if (!(name.Count() > 1)) {
+                    currentBench.Name = name[0];
+                }
+                else
+                {
+                    currentBench.Name = name[0] + ' ' + name[1].ToCharArray()[0] + '.';
+                }
                 currentBench.Description = bench.Description;
                 currentBench.Latitude = bench.Latitude;
                 currentBench.Longitude = bench.Longitude;

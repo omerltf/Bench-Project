@@ -12,5 +12,6 @@ namespace AirBench.FormModels
         public int Rating { get; set; }
         public string Description { get; set; }
         public int BenchId { get; set; }
+        //public DateTime CreatedOn { get; set; }
     }
 }
