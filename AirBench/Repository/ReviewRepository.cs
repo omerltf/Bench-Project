@@ -1,5 +1,6 @@
 ﻿using AirBench.Data;
 using AirBench.Models;
+using System.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace AirBench.Repository
         public List<Review> GetReviewList(int id)
         {
             return context.Reviews
+                    .Include(r => r.User)
                     .Where(r => r.BenchId == id)
                     .OrderByDescending(r => r.CreatedOn)
                     .ToList();
