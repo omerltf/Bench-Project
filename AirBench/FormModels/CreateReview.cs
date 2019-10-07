@@ -10,6 +10,7 @@ namespace AirBench.FormModels
     {
         [Range (1,5)]
         public int Rating { get; set; }
+        [Required]
         public string Description { get; set; }
         public int BenchId { get; set; }
     }

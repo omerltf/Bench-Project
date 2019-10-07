@@ -59,16 +59,21 @@ async function getBenchList (){
 let benches = await getBenchList();
 let jsonResponse = await benches.json();
 
-async function drawMarkers (){
+async function drawMarkers (response){
     
-    DisplayBenches(jsonResponse.benchList)
+    //DisplayBenches(jsonResponse.benchList)
     //console.log(jsonResponse)
-    jsonResponse.benchList.forEach(element => {
+    vectorSource.clear();
+    // filter.forEach(element => {
+    //     console.log(element)
+    //     addMarker(element['Latitude'], element['Longitude'], element['Id']);
+    // });
+    response.forEach(element => {
         console.log(element)
         addMarker(element['Latitude'], element['Longitude'], element['Id']);
     });
 }
-drawMarkers();
+drawMarkers(jsonResponse.benchList);
 
 
 function clickHandler (event){
@@ -135,8 +140,9 @@ function minFunction (event) {
     else {
         filteredbench = jsonResponse.benchList;
     }
+    vectorSource.clear();
+    drawMarkers(filteredbench);
     DisplayBenches(filteredbench)
-    console.log(filteredbench)
 }
 
 function maxFunction (event) {
@@ -167,6 +173,8 @@ function maxFunction (event) {
     else {
         filteredbench = jsonResponse.benchList;    
     }
+    vectorSource.clear();
+    drawMarkers(filteredbench);
     DisplayBenches(filteredbench)
 }
 

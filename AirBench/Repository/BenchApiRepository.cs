@@ -48,7 +48,34 @@ namespace AirBench.Repository
                 {
                     currentBench.Name = name[0] + ' ' + name[1].ToCharArray()[0] + '.';
                 }
-                currentBench.Description = bench.Description;
+
+                //Add ellipses code here
+
+                string description = bench.Description;
+                string shortDescription = string.Empty;
+
+                // Make sure that we have a description...
+                if (!string.IsNullOrWhiteSpace(description))
+                {
+                    // Get a collection of the words in the description.
+                    var words = description
+                        .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    // If we have more than 10 words
+                    // then take the first 10 and add "..." to the end
+                    // otherwise just use the description as is. 
+                    if (words.Length > 10)
+                    {
+                        shortDescription = string.Join(" ", words.Take(10)) + "...";
+                    }
+                    else
+                    {
+                        shortDescription = description;
+                    }
+                }
+
+
+                currentBench.Description = shortDescription;
                 currentBench.Latitude = bench.Latitude;
                 currentBench.Longitude = bench.Longitude;
                 currentBench.NumberOfSeats = bench.NumberOfSeats;
@@ -61,7 +88,7 @@ namespace AirBench.Repository
                 }
                 if (reviews.Count != 0)
                 {
-                    currentBench.Rating = sum / reviews.Count;
+                    currentBench.Rating = Math.Round((sum / reviews.Count),1);
                 }
                 else
                 {
